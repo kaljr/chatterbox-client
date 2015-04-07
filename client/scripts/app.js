@@ -1,8 +1,3 @@
-var message = {
-  'username': 'Anonymous',
-  'text': 'whatever',
-  'roomname': '4chan'
-};
 
 var app={};
 app.set = false;
@@ -14,12 +9,30 @@ app.init = function() {
   })
 
 
+$('.refresh').on('click',function(){
+  app.clearMessages()
+  app.fetch()
+})
+
   if(!app.set) {
     $('#send .submit').one("submit",function(){
       app.handleSubmit();
     })
     app.set = true;
   }
+  $('.newMessage').on('click',function(){
+    var user = window.location.search.replace("?username=","");
+    var room = 'some room';
+    var text = $('#message').val();
+
+    var obj = {
+      'username': user,
+      'text': text,
+      'roomname': room
+    };
+
+    app.send(obj)
+  })
 };
 app.send = function(message) {
   $.ajax({
@@ -41,14 +54,16 @@ app.send = function(message) {
 app.fetch = function(){
   $.ajax({
     // always use this url
-    url: 'https://api.parse.com/1/classes/chatterbox/',
+    url: 'https://api.parse.com/1/classes/chatterbox',
     type: 'GET',
-    data: 'where={"createdAt":{"$gte":"2015-04-05T12:00:00Z"}}',
+    //data: 'where={"createdAt":{"$gte":"2015-04-07T02:00:10.236Z"}}',
+    data: {order:"-updatedAt", limit:"50"},
+    //data: 'where={"username":"Anonymous"}',
     contentType: 'application/json',
 
     success: function (data) {
 
-    for(var i = 0; i < data.results.length  ; i++){
+    for(var i = 0; i < data.results.length   ; i++){
       var createdAt = data.results[i].createdAt;
       var objectId = data.results[i].objectId;
       var roomname = data.results[i].roomname;
@@ -57,8 +72,8 @@ app.fetch = function(){
       var updatedAt = data.results[i].updatedAt;
       var username = data.results[i].username
 
-      var $message = $('<div></div>').text(username + " : " + text + " " + createdAt)
-      var $container = $("#main").append($message)
+      var $message = $('<div></div>').text(username + " : " + text + " " + roomname)
+      var $container = $("#chats").append($message)
     }
 
     },
@@ -88,3 +103,9 @@ app.addRoom = function(roomname){
 app.handleSubmit = function(){
   console.log('handleSubmit called')
 }
+
+$(document).ready(function() {
+  app.init();
+});
+
+

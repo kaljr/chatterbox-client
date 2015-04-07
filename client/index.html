@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>chatterbox</title>
+
     <link rel="stylesheet" href="styles/styles.css">
 
     <!-- dependencies -->
@@ -15,10 +16,14 @@
   <body>
     <div id="main">
       <h1>chatterbox</h1>
+      <button type="button" class = "refresh">Click me for the latest messages from your friends!</button>
       <div id = "roomSelect"></div>
+      <div id = "messageBox">
+        <div id = 'messageInput'>What do you want to say?</div>
+        <input id = "message" type = "text"></input>
+        <button type="button" class = "newMessage">Add your positive message to the world. We need it.</button>
+      </div>
       <div id = "chats"></div>
-      <div id = 'messageInput'>What the fuck do you want to say</div>
-      <input id = "message" type = "text"></input>
 
     </div>
   </body>

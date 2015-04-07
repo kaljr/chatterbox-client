@@ -9,10 +9,10 @@ app.init = function() {
   })
 
 
-$('.refresh').on('click',function(){
-  app.clearMessages()
-  app.fetch()
-})
+  $('.refresh').on('click',function(){
+    app.clearMessages()
+    app.fetch()
+  })
 
   if(!app.set) {
     $('#send .submit').one("submit",function(){
@@ -72,9 +72,18 @@ app.fetch = function(){
       var updatedAt = data.results[i].updatedAt;
       var username = data.results[i].username
 
-      var $message = $('<div></div>').text(username + " : " + text + " " + roomname)
-      var $container = $("#chats").append($message)
+      var $newDiv = $('<div></div>');
+      var $username = $('<span></span>').text(username).addClass('username '+username);
+      var $message = $('<span></span>').text(": "+text);
+
+      $newDiv.append($username).append($message);
+
+
+      var $container = $("#chats").append($newDiv);
     }
+    $('.username').on('click', function() {
+      $("." + $(this).text()).css("font-weight", "bold");
+    });
 
     },
     error: function (data) {
